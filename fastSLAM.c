@@ -16,7 +16,7 @@ Particle* fastSLAM(Particle *particles, int numParticles, float *z, float *u){
     Particle *particlePointer, *particleAuxPointer, *particlesAux, *particlesFinal;
     Landmark *landmarks, *landmarksAux, *landmarkPointer, *landmarkAuxPointer;
 
-    particlesAux = malloc(numParticles * sizeof(Particle));
+    particlesAux = particlesInit(numParticles);
 
     for(int i = 0; i < numParticles; i++){
         particlePointer = &particles[i];
