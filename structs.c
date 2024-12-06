@@ -12,7 +12,7 @@ typedef struct Particle{
     struct Landmark *landmarks;
 }Particle;
 
-Particle* particlesInit(numParticles){
+Particle* particlesInit(int numParticles){
     Particle *particles, *particlePointer;
     float *pose;
 

@@ -12,6 +12,6 @@ typedef struct Particle{
 
 Particle* fastSLAM(Particle *particles, int numParticles, float *z, float *u);
 
-Particle* particlesInit(numParticles);
+Particle* particlesInit(int numParticles);
 
 int* lowVarianceSampler(Particle particles[], float weights[], int numParticles);
