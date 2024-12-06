@@ -11,20 +11,8 @@ int main(){
     int numParticles, len, zLen;
 
     numParticles = 100;
-    particlesAux = malloc(numParticles * sizeof(Particle));
 
-    for(int n = 0; n < numParticles; n++){
-        pose = malloc(3 * sizeof(float));
-        pose[0] = 0.0;
-        pose[1] = 0.0;
-        pose[2] = 0.0;
-
-        particlePointer = &particlesAux[n];
-        particlePointer -> weight = 0.0;
-        particlePointer -> pose = pose;
-        particlePointer -> mapSize = 0;
-        particlePointer -> landmarks = malloc(sizeof(Landmark));
-    }
+    particlesAux = particlesInit(numParticles);
 
     for(int i = 0; i < 1000; i++){
         cJSON *sample, *speed, *steer, *cam_cones, *blue, *yellow, *conePos, *coord;
