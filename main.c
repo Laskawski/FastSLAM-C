@@ -63,11 +63,6 @@ int main(){
         particlesAux = particles;
 
         cJSON_Delete(sample);
-        cJSON_Delete(speed);
-        cJSON_Delete(steer);
-        cJSON_Delete(cam_cones);
-        cJSON_Delete(blue);
-        cJSON_Delete(yellow);
 
         free(u);
         free(z);
