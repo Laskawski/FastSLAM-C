@@ -1,3 +1,4 @@
+#include <cblas.h>
 #include <stdlib.h>
 
 typedef struct Landmark{
@@ -11,6 +12,17 @@ typedef struct Particle{
     int mapSize;
     struct Landmark *landmarks;
 }Particle;
+
+void landmarksCopy(Landmark landmarkO, Landmark landmarkD){
+    Landmark *landmarkPointerO, *landmarkPointerD;
+
+    landmarkPointerO = &landmarkO;
+    landmarkPointerD = &landmarkD;
+
+    cblas_scopy(2, landmarkPointerO -> mean, 1, landmarkPointerD -> mean, 1);
+    cblas_scopy(4, landmarkPointerO -> covariance, 1, landmarkPointerD -> covariance, 1);
+    landmarkPointerD -> counter = landmarkPointerO -> counter;
+}
 
 Particle* particlesInit(int numParticles){
     Landmark *landmark;

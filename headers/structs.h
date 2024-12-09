@@ -12,6 +12,8 @@ typedef struct Particle{
 
 Particle* fastSLAM(Particle *particles, int numParticles, float *z, float *u);
 
+void landmarksCopy(Landmark landmarkO, Landmark landmarkD);
+
 Particle* particlesInit(int numParticles);
 
 void particlesCopy(Particle particleO, Particle particleD);
