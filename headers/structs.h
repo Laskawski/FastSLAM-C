@@ -14,4 +14,6 @@ Particle* fastSLAM(Particle *particles, int numParticles, float *z, float *u);
 
 Particle* particlesInit(int numParticles);
 
+Particle* particlesCopy(int numParticles, Particle *particlesO, Particle *particlesD);
+
 int* lowVarianceSampler(Particle particles[], float weights[], int numParticles);

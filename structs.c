@@ -33,3 +33,16 @@ Particle* particlesInit(int numParticles){
 
     return particles;
 }
+
+Particle* particlesCopy(int numParticles, Particle *particlesO, Particle *particlesD){
+    Particle *particlesPointerO, *particlesPointerD;
+
+    for(int n = 0; n < numParticles; n++){
+        particlesPointerO = &particlesO[n];
+        particlesPointerD = &particlesD[n];
+        particlesPointerD -> weight = particlesPointerO -> weight;
+        particlesPointerD -> pose = particlesPointerO -> pose;
+        particlesPointerD -> mapSize = particlesPointerO -> mapSize;
+        particlesPointerD -> landmarks = particlesPointerO -> landmarks;
+    }
+}
