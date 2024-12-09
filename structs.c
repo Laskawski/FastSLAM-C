@@ -64,11 +64,19 @@ Particle* particlesInit(int numParticles){
 
 void particlesCopy(Particle particleO, Particle particleD){
     Particle *particlePointerO, *particlePointerD;
+    Landmark *landmarksPointerO, *landmarksPointerD;
 
     particlePointerO = &particleO;
     particlePointerD = &particleD;
+
     particlePointerD -> weight = particlePointerO -> weight;
-    particlePointerD -> pose = particlePointerO -> pose;
     particlePointerD -> mapSize = particlePointerO -> mapSize;
-    particlePointerD -> landmarks = particlePointerO -> landmarks;
+    cblas_scopy(3, particlePointerO -> pose, 1, particlePointerD -> pose, 1);
+
+    landmarksPointerO = particlePointerO -> landmarks;
+    landmarksPointerD = particlePointerD -> landmarks;
+
+    for(int n = 0; n < particlePointerO -> mapSize; n++){
+        landmarksCopy(landmarksPointerO[n], landmarksPointerD[n]);
+    }
 }
