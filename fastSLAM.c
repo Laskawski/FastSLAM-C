@@ -11,7 +11,7 @@
 #include "headers/utils.h"
 
 Particle* fastSLAM(Particle *particles, int numParticles, float *z, float *u){
-    float *prevPose, *rotMat, *currPose, *measPred, *measCov, *measProb, *randU, weights[numParticles];
+    float *prevPose, *rotMat, *currPose, *measPred, *measCov, *measProb, *randU, *newMean, *newCov, weights[numParticles];
     int numLandmarks, corrLandmark, *sampledIndexes;
     Particle *particlePointer, *particleAuxPointer, *particlesAux, *particlesFinal;
     Landmark *landmarks, *landmarksAux, *landmarkPointer, *landmarkAuxPointer;
@@ -58,11 +58,15 @@ Particle* fastSLAM(Particle *particles, int numParticles, float *z, float *u){
             landmarkAuxPointer = &landmarksAux[n];
 
             if (n == particlePointer -> mapSize){
-                landmarkAuxPointer -> mean = newLandmarkMean(currPose, z, rotMat);
-                landmarkAuxPointer -> covariance = newLandmarkCov(currPose, rotMat);
+                newMean = newLandmarkMean(currPose, z, rotMat);
+                newCov = newLandmarkCov(currPose, rotMat);
+                cblas_scopy(2, newMean, 1, landmarkAuxPointer -> mean, 1);
+                cblas_scopy(4, newCov, 1, landmarkAuxPointer -> covariance, 1);
+                free(newMean);
+                free(newCov);
             }else{
-                landmarkAuxPointer -> mean = landmarkPointer -> mean;
-                landmarkAuxPointer -> covariance = landmarkPointer -> covariance;
+                cblas_scopy(2, landmarkPointer -> mean, 1, landmarkAuxPointer -> mean, 1);
+                cblas_scopy(4, landmarkPointer -> covariance, 1, landmarkAuxPointer -> covariance, 1);
 
                 if(n == corrLandmark) correct(landmarkAuxPointer -> mean, landmarkAuxPointer -> covariance, z, currPose);
             }
@@ -74,7 +78,7 @@ Particle* fastSLAM(Particle *particles, int numParticles, float *z, float *u){
 
     particlesFinal = malloc(numParticles * sizeof(Particle));
 
-    for(int i = 0; i < particleAuxPointer -> mapSize; i++) particlesFinal[i] = particlesAux[sampledIndexes[i]];
+    for(int i = 0; i < particleAuxPointer -> mapSize; i++) particlesCopy(particlesAux[sampledIndexes[i]], particlesFinal[i]);
 
     free(particlesAux);
 
