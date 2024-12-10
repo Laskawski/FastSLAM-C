@@ -76,7 +76,7 @@ Particle* fastSLAM(Particle *particles, int numParticles, float *z, float *u){
 
     sampledIndexes = lowVarianceSampler(particlesAux, weights, numParticles);
 
-    particlesFinal = malloc(numParticles * sizeof(Particle));
+    particlesFinal = particlesInit(numParticles);
 
     for(int i = 0; i < particleAuxPointer -> mapSize; i++) particlesCopy(particlesAux[sampledIndexes[i]], particlesFinal[i]);
 
