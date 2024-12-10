@@ -35,6 +35,8 @@ Particle* fastSLAM(Particle *particles, int numParticles, float *z, float *u){
         randU[1] = STEER_UNCERTAINTY * randU[1] + u[1];
         currPose = newPose(prevPose, randU);
 
+        free(randU);
+
         rotMat = rotationMatrix(prevPose[0]);
 
         //Calculate measurement for probabilty for each landmark
@@ -43,6 +45,8 @@ Particle* fastSLAM(Particle *particles, int numParticles, float *z, float *u){
             measPred = predMeasurement(landmarkPointer -> mean, prevPose, rotMat);
             measCov = measurementCovariance(landmarkPointer -> mean, landmarkPointer -> covariance, prevPose, rotMat);
             measProb[j] = measurementProbability(measPred, measCov, z);
+            free(measPred);
+            free(measCov);
         }
         measProb[numLandmarks] = 0.5; //Probability threshold for new landmark
         corrLandmark = argMax(measProb, numLandmarks + 1); //Index of landmark with maximum measurement probability
@@ -71,6 +75,7 @@ Particle* fastSLAM(Particle *particles, int numParticles, float *z, float *u){
                 if(n == corrLandmark) correct(landmarkAuxPointer -> mean, landmarkAuxPointer -> covariance, z, currPose);
             }
         }
+        free(rotMat);
         free(measProb);
     }
 
@@ -81,6 +86,7 @@ Particle* fastSLAM(Particle *particles, int numParticles, float *z, float *u){
     for(int i = 0; i < numParticles; i++) particlesCopy(particlesAux[sampledIndexes[i]], particlesFinal[i]);
 
     free(particlesAux);
+    free(sampledIndexes);
 
     return particlesFinal;
 }
