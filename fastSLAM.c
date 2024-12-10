@@ -78,7 +78,7 @@ Particle* fastSLAM(Particle *particles, int numParticles, float *z, float *u){
 
     particlesFinal = particlesInit(numParticles);
 
-    for(int i = 0; i < particleAuxPointer -> mapSize; i++) particlesCopy(particlesAux[sampledIndexes[i]], particlesFinal[i]);
+    for(int i = 0; i < numParticles; i++) particlesCopy(particlesAux[sampledIndexes[i]], particlesFinal[i]);
 
     free(particlesAux);
 
