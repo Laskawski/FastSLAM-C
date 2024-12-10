@@ -10,7 +10,7 @@ typedef struct Particle{
     struct Landmark *landmarks;
 }Particle;
 
-Particle* fastSLAM(Particle *particles, int numParticles, float *z, float *u);
+void fastSLAM(Particle *particles, int numParticles, float *z, float *u);
 
 void landmarksCopy(Landmark landmarkO, Landmark landmarkD);
 

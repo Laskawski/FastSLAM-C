@@ -10,10 +10,10 @@
 #include "headers/structs.h"
 #include "headers/utils.h"
 
-Particle* fastSLAM(Particle *particles, int numParticles, float *z, float *u){
+void fastSLAM(Particle *particles, int numParticles, float *z, float *u){
     float *prevPose, *rotMat, *currPose, *measPred, *measCov, *measProb, *randU, *newMean, *newCov, weights[numParticles];
     int numLandmarks, corrLandmark, *sampledIndexes;
-    Particle *particlePointer, *particleAuxPointer, *particlesAux, *particlesFinal;
+    Particle *particlePointer, *particleAuxPointer, *particlesAux;
     Landmark *landmarks, *landmarksAux, *landmarkPointer, *landmarkAuxPointer;
 
     particlesAux = particlesInit(numParticles);
@@ -81,12 +81,8 @@ Particle* fastSLAM(Particle *particles, int numParticles, float *z, float *u){
 
     sampledIndexes = lowVarianceSampler(particlesAux, weights, numParticles);
 
-    particlesFinal = particlesInit(numParticles);
-
-    for(int i = 0; i < numParticles; i++) particlesCopy(particlesAux[sampledIndexes[i]], particlesFinal[i]);
+    for(int i = 0; i < numParticles; i++) particlesCopy(particlesAux[sampledIndexes[i]], particles[i]);
 
     free(particlesAux);
     free(sampledIndexes);
-
-    return particlesFinal;
 }

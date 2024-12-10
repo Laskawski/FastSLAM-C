@@ -6,13 +6,13 @@
 
 int main(){
     FILE *fp;
-    Particle *particles, *particlesAux, *particlePointer;
+    Particle *particles, *particlePointer;
     float *pose;
     int numParticles, len, zLen;
 
     numParticles = 100;
 
-    particlesAux = particlesInit(numParticles);
+    particles = particlesInit(numParticles);
 
     for(int i = 0; i < 1000; i++){
         cJSON *sample, *speed, *steer, *cam_cones, *blue, *yellow, *conePos, *coord;
@@ -58,9 +58,7 @@ int main(){
             }
         }
 
-        particles = fastSLAM(particlesAux, numParticles, z, u);
-        free(particlesAux);
-        particlesAux = particles;
+        fastSLAM(particles, numParticles, z, u);
 
         cJSON_Delete(sample);
 
