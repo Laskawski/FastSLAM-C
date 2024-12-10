@@ -11,7 +11,7 @@
 #include "headers/utils.h"
 
 void fastSLAM(Particle *particles, int numParticles, float *z, float *u){
-    float *prevPose, *rotMat, *currPose, *measPred, *measCov, *measProb, *randU, *newMean, *newCov, weights[numParticles];
+    float *rotMat, *currPose, *measPred, *measCov, *measProb, *randU, *newMean, *newCov, weights[numParticles];
     int numLandmarks, corrLandmark, *sampledIndexes;
     Particle *particlePointer, *particleAuxPointer, *particlesAux;
     Landmark *landmarks, *landmarksAux, *landmarkPointer, *landmarkAuxPointer;
@@ -22,8 +22,6 @@ void fastSLAM(Particle *particles, int numParticles, float *z, float *u){
         particlePointer = &particles[i];
         particleAuxPointer = &particlesAux[i];
 
-        prevPose = particlePointer -> pose;
-
         numLandmarks = particlePointer -> mapSize;
         landmarks = particlePointer -> landmarks;
         landmarksAux = particleAuxPointer -> landmarks;
@@ -33,17 +31,17 @@ void fastSLAM(Particle *particles, int numParticles, float *z, float *u){
         randU = standardNormalDist();
         randU[0] = SPEED_UNCERTAINTY * randU[0] + u[0];
         randU[1] = STEER_UNCERTAINTY * randU[1] + u[1];
-        currPose = newPose(prevPose, randU);
+        currPose = newPose(particlePointer -> pose, randU);
 
         free(randU);
 
-        rotMat = rotationMatrix(prevPose[0]);
+        rotMat = rotationMatrix(currPose[0]);
 
         //Calculate measurement for probabilty for each landmark
         for(int j = 0; j < numLandmarks; j++){
             landmarkPointer = &landmarks[j];
-            measPred = predMeasurement(landmarkPointer -> mean, prevPose, rotMat);
-            measCov = measurementCovariance(landmarkPointer -> mean, landmarkPointer -> covariance, prevPose, rotMat);
+            measPred = predMeasurement(landmarkPointer -> mean, currPose, rotMat);
+            measCov = measurementCovariance(landmarkPointer -> mean, landmarkPointer -> covariance, currPose, rotMat);
             measProb[j] = measurementProbability(measPred, measCov, z);
             free(measPred);
             free(measCov);
