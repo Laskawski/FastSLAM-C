@@ -31,7 +31,9 @@ void fastSLAM(Particle *particles, int numParticles, float *z, float *u){
         randU = standardNormalDist();
         randU[0] = SPEED_UNCERTAINTY * randU[0] + u[0];
         randU[1] = STEER_UNCERTAINTY * randU[1] + u[1];
+
         currPose = newPose(particlePointer -> pose, randU);
+        cblas_scopy(3, currPose, 1, particleAuxPointer -> pose, 1);
 
         free(randU);
 
@@ -75,6 +77,7 @@ void fastSLAM(Particle *particles, int numParticles, float *z, float *u){
         }
         free(rotMat);
         free(measProb);
+        free(currPose);
     }
 
     sampledIndexes = lowVarianceSampler(particlesAux, weights, numParticles);
