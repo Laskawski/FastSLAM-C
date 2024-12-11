@@ -12,10 +12,10 @@ typedef struct Particle{
 
 void fastSLAM(Particle *particles, int numParticles, float *z, float *u);
 
-void landmarksCopy(Landmark landmarkO, Landmark landmarkD);
+void landmarksCopy(Landmark *landmarkPointerO, Landmark *landmarkPointerD);
 
 Particle* particlesInit(int numParticles);
 
-void particlesCopy(Particle particleO, Particle particleD);
+void particlesCopy(Particle *particlePointerO, Particle *particlePointerD);
 
 int* lowVarianceSampler(Particle particles[], float weights[], int numParticles);

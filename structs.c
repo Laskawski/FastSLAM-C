@@ -13,12 +13,7 @@ typedef struct Particle{
     struct Landmark *landmarks;
 }Particle;
 
-void landmarksCopy(Landmark landmarkO, Landmark landmarkD){
-    Landmark *landmarkPointerO, *landmarkPointerD;
-
-    landmarkPointerO = &landmarkO;
-    landmarkPointerD = &landmarkD;
-
+void landmarksCopy(Landmark *landmarkPointerO, Landmark *landmarkPointerD){
     cblas_scopy(2, landmarkPointerO -> mean, 1, landmarkPointerD -> mean, 1);
     cblas_scopy(4, landmarkPointerO -> covariance, 1, landmarkPointerD -> covariance, 1);
     landmarkPointerD -> counter = landmarkPointerO -> counter;
@@ -62,12 +57,8 @@ Particle* particlesInit(int numParticles){
     return particles;
 }
 
-void particlesCopy(Particle particleO, Particle particleD){
-    Particle *particlePointerO, *particlePointerD;
+void particlesCopy(Particle *particlePointerO, Particle *particlePointerD){
     Landmark *landmarksPointerO, *landmarksPointerD;
-
-    particlePointerO = &particleO;
-    particlePointerD = &particleD;
 
     particlePointerD -> weight = particlePointerO -> weight;
     particlePointerD -> mapSize = particlePointerO -> mapSize;
@@ -77,6 +68,6 @@ void particlesCopy(Particle particleO, Particle particleD){
     landmarksPointerD = particlePointerD -> landmarks;
 
     for(int n = 0; n < particlePointerO -> mapSize; n++){
-        landmarksCopy(landmarksPointerO[n], landmarksPointerD[n]);
+        landmarksCopy(&landmarksPointerO[n], &landmarksPointerD[n]);
     }
 }

@@ -82,7 +82,7 @@ void fastSLAM(Particle *particles, int numParticles, float *z, float *u){
 
     sampledIndexes = lowVarianceSampler(particlesAux, weights, numParticles);
 
-    for(int i = 0; i < numParticles; i++) particlesCopy(particlesAux[sampledIndexes[i]], particles[i]);
+    for(int i = 0; i < numParticles; i++) particlesCopy(&particlesAux[sampledIndexes[i]], &particles[i]);
 
     free(particlesAux);
     free(sampledIndexes);
