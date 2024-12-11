@@ -20,11 +20,11 @@ float* measurementCovariance(float *mean, float *covariance, float *pose, float 
     float *auxMat, *measurementCovariance;
 
     auxMat = malloc(4 * sizeof(float));
-    
+
     measurementCovariance = identityMatrix(2);
 
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 2, 2, 2, 1.0, rotMat, 2, covariance, 2, 0.0, auxMat, 2); //auxMat <- rotMat@covariance
-    cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasTrans, 2, 2, 2, 1.0, auxMat, 2, rotMat, 2, 0.0, measurementCovariance, 2); //measurementCovariance <- auxMat@rotMat
+    cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasTrans, 2, 2, 2, 1.0, auxMat, 2, rotMat, 2, 1.0, measurementCovariance, 2); //measurementCovariance <- auxMat@rotMat^T
 
     free(auxMat);
 
