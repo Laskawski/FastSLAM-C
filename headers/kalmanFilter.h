@@ -1,4 +1,4 @@
-void correct(float* mean, float* covariance, float* z, float* pose);
+void correct(float* mean, float* covariance, float* z, float* pose, float *rotMat);
 
 float* kalmanGain(float *mean, float *covariance, float *pose, float *rotMat);
 

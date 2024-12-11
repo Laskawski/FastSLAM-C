@@ -72,7 +72,7 @@ void fastSLAM(Particle *particles, int numParticles, float *z, float *u){
                 cblas_scopy(2, landmarkPointer -> mean, 1, landmarkAuxPointer -> mean, 1);
                 cblas_scopy(4, landmarkPointer -> covariance, 1, landmarkAuxPointer -> covariance, 1);
 
-                if(n == corrLandmark) correct(landmarkAuxPointer -> mean, landmarkAuxPointer -> covariance, z, currPose);
+                if(n == corrLandmark) correct(landmarkAuxPointer -> mean, landmarkAuxPointer -> covariance, z, currPose, rotMat);
             }
         }
         free(rotMat);
