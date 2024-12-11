@@ -20,7 +20,7 @@ void landmarksCopy(Landmark *landmarkPointerO, Landmark *landmarkPointerD){
 }
 
 Particle* particlesInit(int numParticles){
-    Landmark *landmark;
+    Landmark *landmarks, *landmarkPointer;
     Particle *particles, *particlePointer;
     float *pose, *mean, *covariance;
 
@@ -42,16 +42,19 @@ Particle* particlesInit(int numParticles){
         covariance[2] = 0.0;
         covariance[3] = 0.0;
 
-        landmark = malloc(sizeof(Landmark));
-        landmark -> mean = mean;
-        landmark -> covariance = covariance;
-        landmark -> counter = 0;
+        landmarks = malloc(100 * sizeof(Landmark));
+        for(int i = 0; i < 100; i++){
+            landmarkPointer = &landmarks[i];
+            landmarkPointer -> mean = mean;
+            landmarkPointer -> covariance = covariance;
+            landmarkPointer -> counter = 0;
+        }
 
         particlePointer = &particles[n];
         particlePointer -> weight = 0.0;
         particlePointer -> pose = pose;
         particlePointer -> mapSize = 0;
-        particlePointer -> landmarks = landmark;
+        particlePointer -> landmarks = landmarks;
     }
 
     return particles;
