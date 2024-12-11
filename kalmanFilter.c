@@ -17,12 +17,11 @@ float* predMeasurement(float *mean, float *pose, float *rotMat){
 }
 
 float* measurementCovariance(float *mean, float *covariance, float *pose, float *rotMat){
-    float *Id = malloc(4 * sizeof(float));
-    float *auxMat = malloc(4 * sizeof(float));
-    float *measurementCovariance = malloc(4 * sizeof(float));
+    float *auxMat, *measurementCovariance;
 
-    Id = identityMatrix(2);
-    measurementCovariance = Id;
+    auxMat = malloc(4 * sizeof(float));
+    
+    measurementCovariance = identityMatrix(2);
 
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 2, 2, 2, 1.0, rotMat, 2, covariance, 2, 0.0, auxMat, 2); //auxMat <- rotMat@covariance
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasTrans, 2, 2, 2, 1.0, auxMat, 2, rotMat, 2, 0.0, measurementCovariance, 2); //measurementCovariance <- auxMat@rotMat
