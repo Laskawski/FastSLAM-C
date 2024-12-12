@@ -21,16 +21,15 @@ float beta(float *u){
 }
 
 float* newPose(float *prevPose, float *u){
-    float speed, prevHeading, betaU;
+    float speed, betaU;
     float *newPose = malloc(3 * sizeof(float));
 
     speed = u[0];
-    prevHeading = prevPose[0];
     betaU = beta(u);
 
-    newPose[0] = (speed * sin(betaU) / LR) * DELTA_T;
-    newPose[1] = (speed * cos(betaU + prevHeading)) * DELTA_T;
-    newPose[2] = (speed * sin(betaU + prevHeading)) * DELTA_T;
+    newPose[0] = (speed * sin(betaU) / LR) * DELTA_T + prevPose[0];
+    newPose[1] = (speed * cos(betaU + prevPose[0])) * DELTA_T + prevPose[1];
+    newPose[2] = (speed * sin(betaU + prevPose[0])) * DELTA_T + prevPose[2];
 
     return newPose;
 }
