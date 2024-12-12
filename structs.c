@@ -28,21 +28,11 @@ Particle* particlesInit(int numParticles){
 
     for(int n = 0; n < numParticles; n++){
         pose = malloc(3 * sizeof(float));
-        pose[0] = 0.0;
-        pose[1] = 0.0;
-        pose[2] = 0.0;
-
         landmarks = malloc(100 * sizeof(Landmark));
+        
         for(int i = 0; i < 100; i++){
             mean = malloc(2 * sizeof(float));
-            mean[0] = 0.0;
-            mean[1] = 0.0;
-
             covariance = malloc(4 * sizeof(float));
-            covariance[0] = 0.0;
-            covariance[1] = 0.0;
-            covariance[2] = 0.0;
-            covariance[3] = 0.0;
 
             landmarkPointer = &landmarks[i];
             landmarkPointer -> mean = mean;
