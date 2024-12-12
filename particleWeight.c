@@ -14,7 +14,7 @@ float measurementProbability(float *measPred, float *measCov, float *z){
     cblas_scopy(2, z, 1, measDiff, 1);
     cblas_saxpy(2, -1.0, measPred, 1, measDiff, 1);
     cblas_sgemv(CblasRowMajor, CblasNoTrans, 2, 2, 1.0, measCov, 2, measDiff, 1, 0.0, auxVect, 1);
-    exponent = cblas_sdot(2, measDiff, 1, auxVect, 1);
+    exponent = -cblas_sdot(2, measDiff, 1, auxVect, 1);
 
     free(auxVect);
     free(measDiff);
