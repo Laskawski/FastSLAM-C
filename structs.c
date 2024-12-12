@@ -79,7 +79,5 @@ void particlesCopy(Particle *particlePointerO, Particle *particlePointerD){
     landmarksPointerO = particlePointerO -> landmarks;
     landmarksPointerD = particlePointerD -> landmarks;
 
-    for(int n = 0; n < particlePointerO -> mapSize; n++){
-        landmarksCopy(&landmarksPointerO[n], &landmarksPointerD[n]);
-    }
+    for(int n = 0; n < particlePointerO -> mapSize; n++) landmarksCopy(&landmarksPointerO[n], &landmarksPointerD[n]);
 }
