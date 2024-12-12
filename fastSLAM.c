@@ -84,6 +84,6 @@ void fastSLAM(Particle *particles, int numParticles, float *z, float *u){
 
     for(int i = 0; i < numParticles; i++) particlesCopy(&particlesAux[sampledIndexes[i]], &particles[i]);
 
-    free(particlesAux);
+    freeParticles(particlesAux, numParticles);
     free(sampledIndexes);
 }

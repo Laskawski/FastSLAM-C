@@ -50,6 +50,25 @@ Particle* particlesInit(int numParticles){
     return particles;
 }
 
+void freeParticles(Particle *particles, int numParticles){
+    Landmark *landmarksPointer, *landmarkPointer;
+    Particle *particlePointer;
+
+    for(int i = 0; i < numParticles; i++){
+        particlePointer = &particles[i];
+        landmarksPointer = particlePointer -> landmarks;
+
+        for(int j = 0; j < 100; j++){
+            landmarkPointer = &landmarksPointer[j];
+            free(landmarkPointer -> mean);
+            free(landmarkPointer -> covariance);
+        }
+        free(landmarksPointer);
+        free(particlePointer -> pose);
+    }
+    free(particles);
+}
+
 void particlesCopy(Particle *particlePointerO, Particle *particlePointerD){
     Landmark *landmarksPointerO, *landmarksPointerD;
 
