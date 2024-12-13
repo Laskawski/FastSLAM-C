@@ -82,5 +82,7 @@ int main(){
     fclose(fp1);
     fclose(fp2);
 
+    freeParticles(particles, numParticles);
+    
     return 0;
 }
