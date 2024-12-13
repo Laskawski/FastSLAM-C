@@ -5,7 +5,7 @@
 #include "headers/structs.h"
 
 int main(){
-    FILE *fp;
+    FILE *fp1, *fp2;
     Particle *particles, *particlePointer;
     float *pose;
     int numParticles, len, zLen;
@@ -14,16 +14,16 @@ int main(){
 
     particles = particlesInit(numParticles);
 
-    for(int i = 0; i < 1000; i++){
+    for(int i = 0; i < 12000; i++){
         cJSON *sample, *speed, *steer, *cam_cones, *blue, *yellow, *conePos, *coord;
         char adress[92], buffer[1024];
         float *u, *z;
 
         sprintf(adress, "/home/guilherme/Documents/Iniciação_Científica/tracks/data_skidpad/sample_%d.json", i);
 
-        fp = fopen(adress, "r");
-        len = fread(buffer, 1, sizeof(buffer), fp);  
-        fclose(fp);
+        fp1 = fopen(adress, "r");
+        len = fread(buffer, 1, sizeof(buffer), fp1);  
+        fclose(fp1);
 
         sample = cJSON_Parse(buffer);
 
@@ -65,6 +65,23 @@ int main(){
         free(u);
         free(z);
     }
+
+    fp1 = fopen("landmarks.csv", "w+");
+    fp2 = fopen("poses.csv", "w+");
+
+    fprintf(fp2, "theta, x, y, \n");
+
+    for(int i = 0; i < numParticles; i++){
+        fprintf(fp1, "Particle %d,,\n", i + 1);
+        fprintf(fp1, "x, y, \n");
+        fprintf(fp2, "%f, %f, %f, \n", particles[i].pose[0], particles[i].pose[1], particles[i].pose[2]);
+        for(int j = 0; j < particles[i].mapSize; j++){
+            fprintf(fp1,"%f, %f, \n", particles[i].landmarks[j].mean[0], particles[i].landmarks[j].mean[1]);
+        }
+    }
+
+    fclose(fp1);
+    fclose(fp2);
 
     return 0;
 }
