@@ -69,14 +69,13 @@ int main(){
     fp1 = fopen("landmarks.csv", "w+");
     fp2 = fopen("poses.csv", "w+");
 
-    fprintf(fp2, "theta, x, y, \n");
+    fprintf(fp1, "x, y \n");
+    fprintf(fp2, "theta, x, y \n");
 
     for(int i = 0; i < numParticles; i++){
-        fprintf(fp1, "Particle %d,,\n", i + 1);
-        fprintf(fp1, "x, y, \n");
-        fprintf(fp2, "%f, %f, %f, \n", particles[i].pose[0], particles[i].pose[1], particles[i].pose[2]);
+        fprintf(fp2, "%f, %f, %f \n", particles[i].pose[0], particles[i].pose[1], particles[i].pose[2]);
         for(int j = 0; j < particles[i].mapSize; j++){
-            fprintf(fp1,"%f, %f, \n", particles[i].landmarks[j].mean[0], particles[i].landmarks[j].mean[1]);
+            fprintf(fp1,"%f, %f \n", particles[i].landmarks[j].mean[0], particles[i].landmarks[j].mean[1]);
         }
     }
 
