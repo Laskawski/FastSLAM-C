@@ -20,4 +20,4 @@ void freeParticles(Particle *particles, int numParticles);
 
 void particlesCopy(Particle *particlePointerO, Particle *particlePointerD);
 
-int* lowVarianceSampler(Particle particles[], float weights[], int numParticles);
+int* lowVarianceSampler(Particle *particles, float weights[], int numParticles);
