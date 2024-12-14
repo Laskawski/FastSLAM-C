@@ -10,13 +10,15 @@
 #include "headers/structs.h"
 #include "headers/utils.h"
 
-void fastSLAM(Particle *particles, int numParticles, float *z, float *u){
-    float *rotMat, *currPose, *measPred, *measCov, *measProb, *randU, *newMean, *newCov, weights[numParticles];
+void fastSLAM(Particle *particles, int numParticles, int zLen, float *z, float *u){
+    float *rotMat, *currPose, *measPred, *measCov, *measProb, *randU, *newMean, *newCov, weights[numParticles], meas[numParticles];
     int numLandmarks, corrLandmark, *sampledIndexes;
     Particle *particlePointer, *particleAuxPointer, *particlesAux;
     Landmark *landmarks, *landmarksAux, *landmarkPointer, *landmarkAuxPointer;
 
     particlesAux = particlesInit(numParticles);
+
+    for(int n = 0; n < numParticles; n++) weights[n] = 1.0;
 
     for(int i = 0; i < numParticles; i++){
         particlePointer = &particles[i];
@@ -39,45 +41,50 @@ void fastSLAM(Particle *particles, int numParticles, float *z, float *u){
 
         rotMat = rotationMatrix(currPose[0]);
 
-        //Calculate measurement for probabilty for each landmark
-        for(int j = 0; j < numLandmarks; j++){
-            landmarkPointer = &landmarks[j];
-            measPred = predMeasurement(landmarkPointer -> mean, currPose, rotMat);
-            measCov = measurementCovariance(landmarkPointer -> mean, landmarkPointer -> covariance, currPose, rotMat);
-            measProb[j] = measurementProbability(measPred, measCov, z);
-            free(measPred);
-            free(measCov);
-        }
-        measProb[numLandmarks] = 0.5; //Probability threshold for new landmark
-        corrLandmark = argMax(measProb, numLandmarks + 1); //Index of landmark with maximum measurement probability
+        for(int j = 0; j < zLen; j++){
+            meas[0] = z[2 * j];
+            meas[1] = z[2 * j + 1];
 
-        if(corrLandmark == numLandmarks) numLandmarks++;
-
-        particleAuxPointer -> mapSize = numLandmarks;
-        particleAuxPointer -> weight = measProb[corrLandmark];
-        weights[i] = measProb[corrLandmark];
-
-        for(int n = 0; n < numLandmarks; n++){
-            landmarkPointer = &landmarks[n];
-            landmarkAuxPointer = &landmarksAux[n];
-
-            if (n == particlePointer -> mapSize){
-                newMean = newLandmarkMean(currPose, z, rotMat);
-                newCov = newLandmarkCov(currPose, rotMat);
-                cblas_scopy(2, newMean, 1, landmarkAuxPointer -> mean, 1);
-                cblas_scopy(4, newCov, 1, landmarkAuxPointer -> covariance, 1);
-                free(newMean);
-                free(newCov);
-            }else{
-                cblas_scopy(2, landmarkPointer -> mean, 1, landmarkAuxPointer -> mean, 1);
-                cblas_scopy(4, landmarkPointer -> covariance, 1, landmarkAuxPointer -> covariance, 1);
-
-                if(n == corrLandmark) correct(landmarkAuxPointer -> mean, landmarkAuxPointer -> covariance, z, currPose, rotMat);
+            //Calculate measurement for probabilty for each landmark
+            for(int k = 0; k < numLandmarks; k++){
+                landmarkPointer = &landmarks[k];
+                measPred = predMeasurement(landmarkPointer -> mean, currPose, rotMat);
+                measCov = measurementCovariance(landmarkPointer -> mean, landmarkPointer -> covariance, currPose, rotMat);
+                measProb[k] = measurementProbability(measPred, measCov, meas);
+                free(measPred);
+                free(measCov);
             }
+            measProb[numLandmarks] = 0.7; //Probability threshold for new landmark
+            corrLandmark = argMax(measProb, numLandmarks + 1); //Index of landmark with maximum measurement probability
+
+            if(corrLandmark == numLandmarks) numLandmarks++;
+
+            weights[i] = measProb[corrLandmark] * weights[i];
+
+            for(int n = 0; n < numLandmarks; n++){
+                landmarkPointer = &landmarks[n];
+                landmarkAuxPointer = &landmarksAux[n];
+
+                if (n == particlePointer -> mapSize){
+                    newMean = newLandmarkMean(currPose, meas, rotMat);
+                    newCov = newLandmarkCov(currPose, rotMat);
+                    cblas_scopy(2, newMean, 1, landmarkAuxPointer -> mean, 1);
+                    cblas_scopy(4, newCov, 1, landmarkAuxPointer -> covariance, 1);
+                    free(newMean);
+                    free(newCov);
+                }else{
+                    cblas_scopy(2, landmarkPointer -> mean, 1, landmarkAuxPointer -> mean, 1);
+                    cblas_scopy(4, landmarkPointer -> covariance, 1, landmarkAuxPointer -> covariance, 1);
+
+                    if(n == corrLandmark) correct(landmarkAuxPointer -> mean, landmarkAuxPointer -> covariance, meas, currPose, rotMat);
+                }
+            }
+            free(rotMat);
+            free(measProb);
+            free(currPose);
         }
-        free(rotMat);
-        free(measProb);
-        free(currPose);
+        particleAuxPointer -> mapSize = numLandmarks;
+        particleAuxPointer -> weight = weights[corrLandmark];
     }
 
     sampledIndexes = lowVarianceSampler(particlesAux, weights, numParticles);

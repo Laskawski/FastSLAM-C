@@ -34,7 +34,7 @@ int main(){
         blue = cJSON_GetObjectItemCaseSensitive(cam_cones, "blue");
         yellow = cJSON_GetObjectItemCaseSensitive(cam_cones, "yellow");
 
-        zLen = cJSON_GetArraySize(blue) + cJSON_GetArraySize(yellow);
+        zLen = (cJSON_GetArraySize(blue) + cJSON_GetArraySize(yellow)) / 2;
 
         u = malloc(2 * sizeof(float));
         z = malloc(zLen * 2 * sizeof(float));
@@ -58,7 +58,7 @@ int main(){
             }
         }
 
-        fastSLAM(particles, numParticles, z, u);
+        fastSLAM(particles, numParticles, zLen, z, u);
 
         cJSON_Delete(sample);
 
