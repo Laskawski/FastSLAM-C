@@ -41,6 +41,8 @@ float* kalmanGain(float *mean, float *covariance, float *pose, float *rotMat, in
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasTrans, 2, 2, 2, 1.0, covariance, 2, rotMat, 2, 0.0, auxMat, 2); //auxMat <- covariance@rotMat
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 2, 2, 2, 1.0, auxMat, 2, invMeasurementCov, 2, 0.0, auxMat, 2); //auxMat <- auxMat@invMeasurementCov
 
+    free(invMeasurementCov);
+
     return auxMat;
 }
 
@@ -66,6 +68,9 @@ void correct(float* mean, float* covariance, float* z, float* pose, float *rotMa
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 2, 2, 2, -1.0, K, 2, rotMat, 2, 1.0, auxMat, 2); //auxMat <- auxMat - K@rotMat
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 2, 2, 2, 1.0, auxMat, 2, covariance, 2, 0.0, covariance, 2); //covariance <- auxMat@covariance
     
+    free(auxMat);
+    free(K);
+    free(predMeas);
     free(measDiff);
     free(ipiv);
 }
