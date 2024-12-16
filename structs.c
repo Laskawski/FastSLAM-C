@@ -27,7 +27,7 @@ Particle* particlesInit(int numParticles){
     particles = malloc(numParticles * sizeof(Particle));
 
     for(int n = 0; n < numParticles; n++){
-        pose = malloc(3 * sizeof(float));
+        pose = calloc(3, sizeof(float));
         landmarks = malloc(100 * sizeof(Landmark));
         
         for(int i = 0; i < 100; i++){
