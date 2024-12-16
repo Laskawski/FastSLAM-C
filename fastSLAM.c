@@ -11,7 +11,7 @@
 #include "headers/utils.h"
 
 void fastSLAM(Particle *particles, int numParticles, int zLen, float *z, float *u){
-    float *rotMat, *currPose, *measPred, *measCov, *measProb, *randU, *newMean, *newCov, weights[numParticles], meas[2];
+    float *rotMat, *currPose, *measPred, *measCov, *randU, *newMean, *newCov, meas[2], weights[numParticles];
     int numLandmarks, corrLandmark, *sampledIndexes;
     Particle *particlePointer, *particleAuxPointer, *particlesAux;
     Landmark *landmarks, *landmarksAux, *landmarkPointer, *landmarkAuxPointer;
@@ -28,8 +28,6 @@ void fastSLAM(Particle *particles, int numParticles, int zLen, float *z, float *
         landmarks = particlePointer -> landmarks;
         landmarksAux = particleAuxPointer -> landmarks;
 
-        measProb = malloc((numLandmarks + 1) * sizeof(float));
-
         randU = standardNormalDist();
         randU[0] = SPEED_UNCERTAINTY * randU[0] + u[0];
         randU[1] = STEER_UNCERTAINTY * randU[1] + u[1];
@@ -42,6 +40,8 @@ void fastSLAM(Particle *particles, int numParticles, int zLen, float *z, float *
         rotMat = rotationMatrix(currPose[0]);
 
         for(int j = 0; j < zLen; j++){
+            float measProb[numLandmarks + 1];
+
             meas[0] = z[2 * j];
             meas[1] = z[2 * j + 1];
 
@@ -79,7 +79,6 @@ void fastSLAM(Particle *particles, int numParticles, int zLen, float *z, float *
                     if(n == corrLandmark) correct(landmarkAuxPointer -> mean, landmarkAuxPointer -> covariance, meas, currPose, rotMat);
                 }
             }
-            free(measProb);
         }
         free(currPose);
         free(rotMat);
