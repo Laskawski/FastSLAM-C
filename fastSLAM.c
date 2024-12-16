@@ -79,10 +79,10 @@ void fastSLAM(Particle *particles, int numParticles, int zLen, float *z, float *
                     if(n == corrLandmark) correct(landmarkAuxPointer -> mean, landmarkAuxPointer -> covariance, meas, currPose, rotMat);
                 }
             }
-            free(rotMat);
             free(measProb);
-            free(currPose);
         }
+        free(currPose);
+        free(rotMat);
         particleAuxPointer -> mapSize = numLandmarks;
         particleAuxPointer -> weight = weights[corrLandmark];
     }
