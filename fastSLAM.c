@@ -11,7 +11,7 @@
 #include "headers/utils.h"
 
 void fastSLAM(Particle *particles, int numParticles, int zLen, float *z, float *u){
-    float *rotMat, *currPose, *measPred, *measCov, *measProb, *randU, *newMean, *newCov, weights[numParticles], meas[numParticles];
+    float *rotMat, *currPose, *measPred, *measCov, *measProb, *randU, *newMean, *newCov, weights[numParticles], meas[2];
     int numLandmarks, corrLandmark, *sampledIndexes;
     Particle *particlePointer, *particleAuxPointer, *particlesAux;
     Landmark *landmarks, *landmarksAux, *landmarkPointer, *landmarkAuxPointer;
