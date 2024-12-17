@@ -82,7 +82,7 @@ void fastSLAM(Particle *particles, int numParticles, int zLen, float *z, float *
         free(currPose);
         free(rotMat);
         particleAuxPointer -> mapSize = numLandmarks;
-        particleAuxPointer -> weight = weights[corrLandmark];
+        particleAuxPointer -> weight = weights[i];
     }
 
     sampledIndexes = lowVarianceSampler(particlesAux, weights, numParticles);
