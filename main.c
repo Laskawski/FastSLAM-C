@@ -1,23 +1,28 @@
+#include <math.h>
 #include <stdlib.h>
 #include <stdio.h>
+#include <cblas.h>
 #include <cjson/cJSON.h>
 
 #include "headers/structs.h"
+#include "headers/utils.h"
 
 int main(){
     FILE *fp1, *fp2;
     Particle *particles, *particlePointer;
-    float *pose;
+    float *pose, *rot90;
     int numParticles, len, zLen;
 
     numParticles = 100;
 
     particles = particlesInit(numParticles);
 
+    rot90 = rotationMatrix(M_PI / 2);
+
     for(int i = 0; i < 12000; i++){
         cJSON *sample, *speed, *steer, *cam_cones, *blue, *yellow, *conePos, *coord;
         char adress[92], buffer[1024];
-        float *u, *z;
+        float *u, *z, *zAux1, *zAux2;
 
         sprintf(adress, "/home/guilherme/Documents/Iniciação_Científica/tracks/data_skidpad/sample_%d.json", i);
 
@@ -57,6 +62,20 @@ int main(){
                 j++;
             }
         }
+
+        zAux1 = malloc(2 * sizeof(float));
+        zAux2 = malloc(2 * sizeof(float));
+
+        for(int j = 0; j < zLen; j++){
+            zAux1[0] = z[2 * j];
+            zAux1[1] = z[2 * j + 1];
+            cblas_sgemv(CblasRowMajor, CblasNoTrans, 2, 2, 1.0, rot90, 2, zAux1, 1, 0.0, zAux2, 1);
+            z[2 * j] = zAux2[0];
+            z[2 * j + 1] = zAux2[1];
+        }
+
+        free(zAux1);
+        free(zAux2);
 
         fastSLAM(particles, numParticles, zLen, z, u);
 
