@@ -46,7 +46,7 @@ void fastSLAM(Particle *particles, int numParticles, int zLen, float *z, float *
             meas[1] = z[2 * j + 1];
 
             //Calculate measurement for probabilty for each landmark
-            for(int k = 0; k < numLandmarks; k++){
+            for(int k = 0; k < particlePointer -> mapSize; k++){
                 landmarkPointer = &landmarks[k];
                 measPred = predMeasurement(landmarkPointer -> mean, currPose, rotMat);
                 measCov = measurementCovariance(landmarkPointer -> mean, landmarkPointer -> covariance, currPose, rotMat);
@@ -57,21 +57,20 @@ void fastSLAM(Particle *particles, int numParticles, int zLen, float *z, float *
             measProb[numLandmarks] = 0.7; //Probability threshold for new landmark
             corrLandmark = argMax(measProb, numLandmarks + 1); //Index of landmark with maximum measurement probability
 
-            if(corrLandmark == numLandmarks) numLandmarks++;
-
             weights[i] = measProb[corrLandmark] * weights[i];
 
-            for(int n = 0; n < numLandmarks; n++){
-                landmarkPointer = &landmarks[n];
+            for(int n = 0; n < particlePointer -> mapSize; n++){
+                landmarkPointer = &landmarks[n]; //goes beyond allocated memory
                 landmarkAuxPointer = &landmarksAux[n];
 
                 if (n == particlePointer -> mapSize){
                     newMean = newLandmarkMean(currPose, meas, rotMat);
                     newCov = newLandmarkCov(currPose, rotMat);
-                    cblas_scopy(2, newMean, 1, landmarkAuxPointer -> mean, 1);
-                    cblas_scopy(4, newCov, 1, landmarkAuxPointer -> covariance, 1);
+                    cblas_scopy(2, newMean, 1, landmarksAux[numLandmarks].mean, 1);
+                    cblas_scopy(4, newCov, 1, landmarksAux[numLandmarks].covariance, 1);
                     free(newMean);
                     free(newCov);
+                    numLandmarks++;
                 }else{
                     cblas_scopy(2, landmarkPointer -> mean, 1, landmarkAuxPointer -> mean, 1);
                     cblas_scopy(4, landmarkPointer -> covariance, 1, landmarkAuxPointer -> covariance, 1);
