@@ -18,11 +18,11 @@ void fastSLAM(Particle *particles, int numParticles, int zLen, float *z, float *
 
     particlesAux = particlesInit(numParticles);
 
-    for(int n = 0; n < numParticles; n++) weights[n] = 1.0;
-
     for(int i = 0; i < numParticles; i++){
         particlePointer = &particles[i];
         particleAuxPointer = &particlesAux[i];
+
+        weights[i] = 1.0;
 
         numLandmarks = particlePointer -> mapSize;
         landmarks = particlePointer -> landmarks;
