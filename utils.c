@@ -15,13 +15,13 @@ float* rotationMatrix(float angle){
     return rotMat;
 }
 
-float* identityMatrix(int numRows){
+float* diagMatrix(int numRows, float value){
     float* matrix = malloc(numRows * numRows * sizeof(float));
     int n = 0;
 
     for(int i = 0; i < numRows; i++){
         for(int j = 0; j < numRows; j++){
-            if(i == j) matrix[n] = 1.0;
+            if(i == j) matrix[n] = value;
             else matrix[n] = 0.0;
             n++;
         }

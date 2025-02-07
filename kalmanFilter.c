@@ -21,7 +21,7 @@ float* measurementCovariance(float *mean, float *covariance, float *pose, float 
 
     auxMat = malloc(4 * sizeof(float));
 
-    measurementCovariance = identityMatrix(2);
+    measurementCovariance = diagMatrix(2, 0.6);
 
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 2, 2, 2, 1.0, rotMat, 2, covariance, 2, 0.0, auxMat, 2); //auxMat <- rotMat@covariance
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasTrans, 2, 2, 2, 1.0, auxMat, 2, rotMat, 2, 1.0, measurementCovariance, 2); //measurementCovariance <- auxMat@rotMat^T
@@ -53,7 +53,7 @@ void correct(float* mean, float* covariance, float* z, float* pose, float *rotMa
 
     ipiv[0] = 1;
     ipiv[1] = 2;
-    auxMat = identityMatrix(2);
+    auxMat = diagMatrix(2, 1.0);
     K = kalmanGain(mean, covariance, pose, rotMat, ipiv);
     predMeas = predMeasurement(mean, pose, rotMat);
 

@@ -19,8 +19,8 @@ float* newLandmarkCov(float *pose, float *rotMat){
     aux = malloc(4 * sizeof(float));
     cov = malloc(4 * sizeof(float));
 
-    Q = identityMatrix(2);
-
+    Q = diagMatrix(2, 0.6);
+    
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasTrans, 2, 2, 2, 1.0, Q, 2, rotMat, 2, 0.0, aux, 2);
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 2, 2, 2, 1.0, rotMat, 2, aux, 2, 0.0, cov, 2);
 

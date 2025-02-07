@@ -1,6 +1,6 @@
 #include <stdlib.h>
 
-float* identityMatrix(int numRows);
+float* diagMatrix(int numRows, float value);
 
 float* rotationMatrix(float angle);
 
