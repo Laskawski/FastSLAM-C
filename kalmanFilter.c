@@ -64,7 +64,7 @@ void correct(float* mean, float* covariance, float* z, float* pose, float *rotMa
     measDiff[1] = z[1] - predMeas[1];
 
     //Correct mean
-    cblas_sgemv(CblasRowMajor, CblasNoTrans, 2, 2, 1.0, K, 4, measDiff, 2, 1.0, mean, 2); //mean <- K@measDiff
+    cblas_sgemv(CblasRowMajor, CblasNoTrans, 2, 2, 1.0, K, 2, measDiff, 1, 1.0, mean, 1); //mean <- K@measDiff
     
     //Correct covariance
     cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 2, 2, 2, -1.0, K, 2, rotMat, 2, 1.0, auxMat, 2); //auxMat <- auxMat - K@rotMat
