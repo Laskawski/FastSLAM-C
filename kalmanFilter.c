@@ -33,17 +33,19 @@ float* measurementCovariance(float *mean, float *covariance, float *pose, float 
 
 float* kalmanGain(float *mean, float *covariance, float *pose, float *rotMat, int *ipiv){
     float *invMeasurementCov;
-    float *auxMat = malloc(4 * sizeof(float));
+    float *auxMat1 = malloc(4 * sizeof(float));
+    float *auxMat2 = malloc(4 * sizeof(float));
 
     invMeasurementCov = measurementCovariance(mean, covariance, pose, rotMat);
 
     LAPACKE_sgetri(LAPACK_ROW_MAJOR, 2, invMeasurementCov, 2, ipiv); //invert measurementCovariance
-    cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasTrans, 2, 2, 2, 1.0, covariance, 2, rotMat, 2, 0.0, auxMat, 2); //auxMat <- covariance@rotMat
-    cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 2, 2, 2, 1.0, auxMat, 2, invMeasurementCov, 2, 0.0, auxMat, 2); //auxMat <- auxMat@invMeasurementCov
+    cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasTrans, 2, 2, 2, 1.0, covariance, 2, rotMat, 2, 0.0, auxMat1, 2); //auxMat <- covariance@rotMat
+    cblas_sgemm(CblasRowMajor, CblasNoTrans, CblasNoTrans, 2, 2, 2, 1.0, auxMat1, 2, invMeasurementCov, 2, 0.0, auxMat2, 2); //auxMat <- auxMat@invMeasurementCov
 
     free(invMeasurementCov);
+    free(auxMat1);
 
-    return auxMat;
+    return auxMat2;
 }
 
 void correct(float* mean, float* covariance, float* z, float* pose, float *rotMat){
