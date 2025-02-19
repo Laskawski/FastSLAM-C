@@ -58,8 +58,8 @@ void correct(float* mean, float* covariance, float* z, float* pose, float *rotMa
     predMeas = predMeasurement(mean, pose, rotMat);
 
     //Calculate difference between predicted and actual measurement
-    cblas_scopy(2, z, 1, measDiff, 1);
-    cblas_saxpy(2, -1, predMeas, 2, measDiff, 2); //measDiff <- measDiff - predMeas
+    measDiff[0] = z[0] - predMeas[0];
+    measDiff[1] = z[1] - predMeas[1];
 
     //Correct mean
     cblas_sgemv(CblasRowMajor, CblasNoTrans, 2, 2, 1.0, K, 4, measDiff, 2, 1.0, mean, 2); //mean <- K@measDiff
