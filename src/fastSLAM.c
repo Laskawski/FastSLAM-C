@@ -6,7 +6,6 @@
 #include "headers/landmarkInit.h"
 #include "headers/motionModel.h"
 #include "headers/particleWeight.h"
-#include "headers/sampling.h"
 #include "headers/structs.h"
 #include "headers/utils.h"
 
