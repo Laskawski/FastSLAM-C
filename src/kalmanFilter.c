@@ -1,7 +1,7 @@
 #include <cblas.h>
 #include <lapacke.h>
-#include "headers/constants.h"
-#include "headers/utils.h"
+#include "../inc/constants.h"
+#include "../inc/utils.h"
 
 float* predMeasurement(float *mean, float *pose, float *rotMat){
     float *relativePos = malloc(2 * sizeof(float));

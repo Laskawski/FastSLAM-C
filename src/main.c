@@ -4,8 +4,8 @@
 #include <cblas.h>
 #include <cjson/cJSON.h>
 
-#include "headers/structs.h"
-#include "headers/utils.h"
+#include "../inc/structs.h"
+#include "../inc/utils.h"
 
 int main(){
     FILE *fp1, *fp2;

@@ -1,7 +1,7 @@
 #include <cblas.h>
 #include <stdlib.h>
-#include "headers/constants.h"
-#include "headers/utils.h"
+#include "../inc/constants.h"
+#include "../inc/utils.h"
 
 float* newLandmarkMean(float *pose, float *z, float *rotMat){
     float *mean = malloc(2 * sizeof(float));

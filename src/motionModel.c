@@ -1,6 +1,6 @@
 #include <math.h>
 #include <stdlib.h>
-#include "headers/constants.h"
+#include "../inc/constants.h"
 
 float derivBeta(float *u){
     float steer, derivBeta;

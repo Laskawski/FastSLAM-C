@@ -1,7 +1,7 @@
 #include <stdlib.h>
 #include <math.h>
-#include "headers/structs.h"
-#include "headers/constants.h"
+#include "../inc/structs.h"
+#include "../inc/constants.h"
 
 int* lowVarianceSampler(Particle *particles, float weights[], int numParticles){
     int i, *indexes;

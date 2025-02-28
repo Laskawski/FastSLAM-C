@@ -1,13 +1,13 @@
 #include <cblas.h>
 #include <stdlib.h>
 
-#include "headers/constants.h"
-#include "headers/kalmanFilter.h"
-#include "headers/landmarkInit.h"
-#include "headers/motionModel.h"
-#include "headers/particleWeight.h"
-#include "headers/structs.h"
-#include "headers/utils.h"
+#include "../inc/constants.h"
+#include "../inc/kalmanFilter.h"
+#include "../inc/landmarkInit.h"
+#include "../inc/motionModel.h"
+#include "../inc/particleWeight.h"
+#include "../inc/structs.h"
+#include "../inc/utils.h"
 
 void fastSLAM(Particle *particles, int numParticles, int zLen, float *z, float *u){
     float *rotMat, *currPose, *measPred, *measCov, *randU, *newMean, *newCov, meas[2], weights[numParticles];
