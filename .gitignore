@@ -1,2 +1,4 @@
 /.lprof
 /bin/*
+*.csv
+*.py
