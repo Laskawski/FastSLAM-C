@@ -1,4 +1,5 @@
 /.lprof
+/.vscode
 /bin/*
 *.csv
 *.py
